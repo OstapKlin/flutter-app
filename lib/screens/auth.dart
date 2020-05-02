@@ -11,6 +11,9 @@ class _AuthPageState extends State<AuthPage> {
  TextEditingController _emailController = TextEditingController();
  TextEditingController _passwordController = TextEditingController();
 
+String _email;
+String _password;
+bool showLogin = true;
 
 @override
 Widget build(BuildContext context) {
@@ -29,7 +32,7 @@ Widget build(BuildContext context) {
 
 Widget _input(Icon icon, String hint, TextEditingController controller, bool obscure){
   return Container(
-    padding: EdgeInsets.only(bottom: 20, top:10),
+    padding: EdgeInsets.only(left: 20, right:20),
     child: TextField(
       controller: controller,
       style: TextStyle(fontSize:20, color: Colors.white),
@@ -54,6 +57,21 @@ Widget _input(Icon icon, String hint, TextEditingController controller, bool obs
   );
 }
 
+Widget _button(String text, void func()){
+  return RaisedButton(
+    splashColor: Theme.of(context).primaryColor,
+    highlightColor: Theme.of(context).primaryColor,
+    color: Colors.white,
+    child: Text(
+      text,
+      style: TextStyle(fontWeight: FontWeight.bold, color: Theme.of(context).primaryColor, fontSize: 20)
+    ),
+    onPressed: (){
+      func();
+    },
+  );
+}
+
   @override
   Widget _form(String label, void func()) {
     return Container(
@@ -67,13 +85,14 @@ Widget _input(Icon icon, String hint, TextEditingController controller, bool obs
             padding: EdgeInsets.only(bottom: 20),
             child: _input(Icon(Icons.lock), "PASSWORD", _passwordController, true)
           ),
+        
           SizedBox(height: 20,),
           Padding(
             padding: EdgeInsets.only(left: 20, right: 20),
             child: Container(
               height: 50,
               width: MediaQuery.of(context).size.width,
-              child: Text(label)
+              child: _button(label, func)
             )
           )
         ],
@@ -81,13 +100,24 @@ Widget _input(Icon icon, String hint, TextEditingController controller, bool obs
     );
   }
 
+  void _loginUser(){
+    _email = _emailController.text;
+    _password = _passwordController.text;
+
+    _emailController.clear();
+    _passwordController.clear();
+  } //Што делает кнопка
+
     return Scaffold(
       backgroundColor: Theme.of(context).primaryColor,
-      body: Column(
+      body: SingleChildScrollView(
+       child: Column(
         children: <Widget>[
           _logo(),
-          _form('LOGIN', (){}),
+          
+          _form('LOGIN', _loginUser),
         ],
+      ),
       )
     );
   
